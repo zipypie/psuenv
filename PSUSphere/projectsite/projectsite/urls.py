@@ -1,26 +1,11 @@
-"""
-URL configuration for projectsite project.
-
-The urlpatterns list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    
-Add an import:  from my_app import views
-Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    
-Add an import:  from other_app.views import Home
-Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    
-Import the include() function: from django.urls import include, path
-Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView, OrganizationUpdateView, OrganizationDeleteView
 from studentorg import views
+from django.contrib.auth import views as auth_views
+from studentorg.views import HomePageView, OrgMemberListView, OrgMemberCreateView, OrgMemberUpdateView, OrgMemberDeleteView
+from studentorg.views import HomePageView, StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView
+from studentorg.views import HomePageView, CollegeListView, CollegeCreateView, CollegeUpdateView, CollegeDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +14,18 @@ urlpatterns = [
     path('organization_list/add' , OrganizationCreateView.as_view(), name= 'organization-add'),
     path('organization_list/<pk>' , OrganizationUpdateView.as_view(), name= 'organization-update'),
     path('organization_list/<pk>/delete' , OrganizationDeleteView.as_view(), name= 'organization-delete'),
+    path('orgmember_list/', OrgMemberListView.as_view(), name='orgmember-list'),
+    path('orgmember_list/add', OrgMemberCreateView.as_view(), name='orgmember-add'),
+    path('orgmember_list/<pk>', OrgMemberUpdateView.as_view(), name='orgmember-update'),
+    path('orgmember_list/<pk>/delete', OrgMemberDeleteView.as_view(), name='orgmember-delete'),
+    path('student_list/', StudentListView.as_view(), name='student-list'),
+    path('student_list/add/', StudentCreateView.as_view(), name='student-add'),
+    path('student_list/<pk>/', StudentUpdateView.as_view(), name='student-update'),
+    path('student_list/<pk>/delete/', StudentDeleteView.as_view(), name='student-delete'),
+    path('college_list/', CollegeListView.as_view(), name='college-list'),
+    path('college_list/add/', CollegeCreateView.as_view(), name='college-add'),
+    path('college_list/<pk>/', CollegeUpdateView.as_view(), name='college-update'),
+    path('college_list/<pk>/delete/', CollegeDeleteView.as_view(), name='college-delete'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
