@@ -39,8 +39,12 @@ class Student(BaseModel):
     def __str__(self):
         return f"{self.lastname}, {self.firstname}"
     
-class OrgMember(BaseModel):
+class OrgMember(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date_joined = models.DateField()
-# Create your models here.
+
+    def __str__(self):
+        return f"{self.student.lastname}, {self.student.firstname}"
+
+

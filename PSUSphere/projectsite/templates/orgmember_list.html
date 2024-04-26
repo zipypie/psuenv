@@ -6,15 +6,15 @@
       <div class="col-md-12">
         <div class="card">
          <div class="card-header">
-           <div class="card-title">List of organization members</div> 
+           <div class="card-title">List of Org members</div> 
            <div class="card-category">Page Subtitle</div>
         </div>
         </br> 
         <div class="col-md-12 row">
         <div class="col-md-6">
-        <form class="navbar-left navbar-form nav-search mr-md-3" action=""> 
+        <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'orgmember-list'%}"> 
             <div class="input-group">
-                <input type="text" placeholder="Search ..." class="form-control" /> 
+                <input type="text" placeholder="Search ..." class="form-control" name="q" /> 
                 <div class="input-group-append">
                 <span class="input-group-text">
                     <i class="la la-search search-icon"></i>
@@ -24,16 +24,16 @@
         </form>
         </div>
         <div class="col-md-6">
-        <div class="pull-right"> <a href="{% url 'orgmember-add' %}" class="btn btn-success btn-rounded">Add Organization Member</a></div>
+        <div class="pull-right"> <a href="{% url 'orgmember-add' %}" class="btn btn-success btn-rounded">Add Organization</a></div>
         </div>
         </div>
         <div class="card-body">
         <table class="table table-striped mt-3">
         <thead>
             <tr>
-              <th scope="col">Name</th>
+              <th scope="col">Student</th>
               <th scope="col">Organization</th>
-              <th scope="col">Date Joined</th>
+              <th scope="col">date_joined</th>
               <th scope="col">Action</th>
             </tr>
             </thead>
@@ -46,7 +46,7 @@
                 <td>
                   <a href="{% url 'orgmember-update' object.id %}">Edit</a>
                   <a href="{% url 'orgmember-delete' object.id %}" class="text-danger">Delete</a>
-              </td>              
+              </td> 
               </try>
               {% empty%}
               <tr>
@@ -65,3 +65,4 @@
     </div>
 </div>
 {% endblock %}
+
