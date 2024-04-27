@@ -10,11 +10,11 @@ from studentorg import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('' , views.HomePageView.as_view(), name= 'home'),
-    path('organization_list' , OrganizationList.as_view(), name= 'organization-list'),
-    path('organization_list/add' , OrganizationCreateView.as_view(), name= 'organization-add'),
-    path('organization_list/<pk>' , OrganizationUpdateView.as_view(), name= 'organization-update'),
-    path('organization_list/<pk>/delete/' , OrganizationDeleteView.as_view(), name= 'organization-delete'),
+    path('', views.HomePageView.as_view(), name='home'),
+    path('org_list/', OrganizationList.as_view(), name='organization-list'),
+    path('org_list/add/', OrganizationCreateView.as_view(), name='organization-add'),
+    path('org_list/<pk>/', OrganizationUpdateView.as_view(), name='organization-update'),
+    path('org_list/<pk>/delete/', OrganizationDeleteView.as_view(), name='organization-delete'),
     path('orgmember_list/', OrgMemberListView.as_view(), name='orgmember-list'),
     path('orgmember_list/add', OrgMemberCreateView.as_view(), name='orgmember-add'),
     path('orgmember_list/<pk>', OrgMemberUpdateView.as_view(), name='orgmember-update'),
@@ -31,7 +31,6 @@ urlpatterns = [
     path('program_list/add/', ProgramCreateView.as_view(), name='program-add'),
     path('program_list/<pk>/', ProgramUpdateView.as_view(), name='program-update'),
     path('program_list/<pk>/delete/', ProgramDeleteView.as_view(), name='program-delete'),
-
     re_path(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 
