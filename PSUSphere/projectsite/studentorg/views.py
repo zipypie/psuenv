@@ -74,21 +74,22 @@ def radarStudenCountEveryCollege(request):
 
     return JsonResponse(result)
 
-from django.http import JsonResponse
-from .models import OrgMember
+def programPolarchart(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query to count student members for each program
+        cursor.execute("""
+            SELECT studentorg_program.prog_name, COUNT(studentorg_program.id) AS student_count
+            FROM studentorg_program
+            INNER JOIN studentorg_student ON studentorg_program.id = studentorg_student.program_id
+            GROUP BY studentorg_program.prog_name
+        """)
+        # Fetch all rows from the cursor
+        rows = cursor.fetchall()
 
-def orgMemberCountEveryOrganization(request):
-    # Query to count members for each organization
-    org_member_counts = OrgMember.objects.values('organization__name').annotate(member_count=Count('id')).order_by('joined_date')
-
-    # Prepare data for the chart
-    result = {
-        'labels': [org['organization__name'] for org in org_member_counts],
-        'counts': [org['member_count'] for org in org_member_counts]
-    }
+        # Prepare data for the chart
+        result = {name: count for name, count in rows}
 
     return JsonResponse(result)
-
 
 class OrganizationList(ListView):
     model = Organization

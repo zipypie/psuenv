@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div class="page-inner" style="margin: 100px 50px">
   <div class="row">
@@ -40,19 +39,22 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Chart with HTML Legends</div>
+          <div class="card-title">Number of every programs</div>
         </div>
         <div class="card-body">
-            <div class="chart-container">
-            <canvas id="html-legends-chart" style="width: 100%; height: 400px;"></canvas>
+          <div class="chart-container">
+            <canvas id="program-polar-chart" style="width: 100%; height: 400px;"></canvas>
           </div>
-          <div id="myChartLegend"></div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+  </div>
+</div>
   </div>
 </div>
 {% endblock %}
@@ -74,109 +76,7 @@
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }
-
-  function loadDoughnutChartCollegeData() {
-    fetch("/doughnut-chart-college/")
-      .then((response) => response.json())
-      .then((data) => {
-        var labels = Object.keys(data);
-        var counts = Object.values(data);
-
-        doughnutChartCollege.data.labels = labels;
-        doughnutChartCollege.data.datasets[0].data = counts;
-
-        doughnutChartCollege.update();
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }
-
-  function loadRadarChartData() {
-    fetch("/radar-chart-college/")
-      .then(response => response.json())
-      .then(data => {
-        var labels = Object.keys(data);
-        var counts = Object.values(data);
-        
-        myRadarChart.data.labels = labels;
-        myRadarChart.data.datasets[0].data = counts;
-        myRadarChart.update();
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }
-
-
-  function loadHtmlLegendsChartData() {
-    fetch("/html-legends-chart/")
-      .then(response => response.json())
-      .then(data => {
-        var labels = data.labels;
-        var counts = data.counts;
-        var randomColors = generateRandomColors(labels.length);
-  
-        // Update chart data
-        myHtmlLegendsChart.data.labels = labels;
-        myHtmlLegendsChart.data.datasets[0].data = counts;
-        myHtmlLegendsChart.data.datasets[0].borderColor = randomColors;
-        myHtmlLegendsChart.data.datasets[0].pointBackgroundColor = randomColors;
-        myHtmlLegendsChart.data.datasets[0].backgroundColor = randomColors;
-        myHtmlLegendsChart.data.datasets[0].legendColor = randomColors;
-  
-        // Update legend
-        updateLegend(labels, randomColors);
-  
-        // Update chart
-        myHtmlLegendsChart.update();
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }
-  
-  function updateLegend(labels, colors) {
-    var legendContainer = document.getElementById("myChartLegend");
-    legendContainer.innerHTML = ""; // Clear existing legend
-  
-    for (var i = 0; i < labels.length; i++) {
-      var label = labels[i];
-      var color = colors[i];
-  
-      var legendItem = document.createElement("div");
-      legendItem.classList.add("legend-item");
-  
-      var colorBox = document.createElement("span");
-      colorBox.classList.add("color-box");
-      colorBox.style.backgroundColor = color;
-  
-      var labelSpan = document.createElement("span");
-      labelSpan.textContent = label;
-  
-      legendItem.appendChild(colorBox);
-      legendItem.appendChild(labelSpan);
-  
-      legendContainer.appendChild(legendItem);
-    }
-  }
-  
-  function generateRandomColors(count) {
-    var colors = [];
-    for (var i = 0; i < count; i++) {
-      // Generate random RGB values
-      var r = Math.floor(Math.random() * 256);
-      var g = Math.floor(Math.random() * 256);
-      var b = Math.floor(Math.random() * 256);
-      var color = `rgba(${r}, ${g}, ${b}, 0.7)`; // Random color with opacity 0.7
-      colors.push(color);
-    }
-    return colors;
-  }
-  
-
-  
+      
   var doughnutChart = new Chart(document.getElementById("doughnut-chart").getContext("2d"), {
     type: 'doughnut',
     data: {
@@ -202,6 +102,24 @@
     }
   });
 
+  }
+
+  function loadDoughnutChartCollegeData() {
+    fetch("/doughnut-chart-college/")
+      .then((response) => response.json())
+      .then((data) => {
+        var labels = Object.keys(data);
+        var counts = Object.values(data);
+
+        doughnutChartCollege.data.labels = labels;
+        doughnutChartCollege.data.datasets[0].data = counts;
+
+        doughnutChartCollege.update();
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+      
   var doughnutChartCollege = new Chart(document.getElementById("doughnut-chart-college").getContext("2d"), {
     type: 'doughnut',
     data: {
@@ -227,6 +145,23 @@
     }
   });
 
+  }
+
+  function loadRadarChartData() {
+    fetch("/radar-chart-college/")
+      .then(response => response.json())
+      .then(data => {
+        var labels = Object.keys(data);
+        var counts = Object.values(data);
+        
+        myRadarChart.data.labels = labels;
+        myRadarChart.data.datasets[0].data = counts;
+        myRadarChart.update();
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+      
   var myRadarChart = new Chart(document.getElementById("radar-chart-college").getContext("2d"), {
       type: "radar",
       data: {
@@ -249,12 +184,67 @@
         },
       },
     });
+  }
+  
+  function loadPolarChartData() {
+    fetch("/program-polar-chart/")
+    .then(response => response.json())
+    .then(data => {
+
+        const labels = Object.keys(data); 
+        const counts = Object.values(data);
+
+        polarChart.data.labels = labels;
+        polarChart.data.datasets[0].data = counts;
+
+
+        polarChart.update();
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+    var polarChart = new Chart(document.getElementById("program-polar-chart").getContext("2d"), {
+      type: 'polarArea',
+      data: {
+          labels: [], // Array to store program names
+          datasets: [{
+              label: 'Students per Program',
+              data: [],
+              backgroundColor: [ 
+                  'rgba(255, 99, 132, 0.6)',
+                  'rgba(54, 162, 235, 0.6)',
+                  'rgba(255, 206, 86, 0.6)',
+                  'rgba(75, 192, 192, 0.6)',
+                  'rgba(153, 102, 255, 0.6)',
+                  'rgba(255, 159, 64, 0.6)',
+                  'rgba(3, 252, 7, 0.6)'
+  
+  
+              ],
+  
+  
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+              position: 'bottom',
+          },
+          scale: {
+              ticks: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+  }
+
   
 
+  
+  
 
-
-    // Chart with HTML Legends
-  loadHtmlLegendsChartData();
+  loadPolarChartData();
   loadDoughnutChartData();
   loadDoughnutChartCollegeData();
   loadRadarChartData();

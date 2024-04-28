@@ -6,7 +6,7 @@ from studentorg.views import OrgMemberListView, OrgMemberCreateView, OrgMemberUp
 from studentorg.views import StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView
 from studentorg.views import CollegeListView, CollegeCreateView, CollegeUpdateView, CollegeDeleteView
 from studentorg.views import ProgramListView, ProgramCreateView, ProgramUpdateView, ProgramDeleteView
-from studentorg.views import HomePageView, ChartView, orgMemDoughnutChart,studentCountEveryCollege,radarStudenCountEveryCollege,orgMemberCountEveryOrganization
+from studentorg.views import HomePageView, ChartView, orgMemDoughnutChart,studentCountEveryCollege,radarStudenCountEveryCollege,programPolarchart
 
 from studentorg import views
 from django.db import connection
@@ -29,7 +29,8 @@ urlpatterns = [
     path('doughnut-chart/', orgMemDoughnutChart, name='doughnut-chart'),
     path('doughnut-chart-college/', studentCountEveryCollege, name='doughnut-chart-college'),
     path('radar-chart-college/', radarStudenCountEveryCollege, name='radar-chart-college'),
-    path('html-legends-chart/', orgMemberCountEveryOrganization, name='html-legends-chart'),
+    path('program-polar-chart/', programPolarchart, name='program-polar-chart'),
+    
     
     path('organization_list/', OrganizationList.as_view(), name='organization-list'),
     path('organization_list/add/', OrganizationCreateView.as_view(), name='organization-add'),
