@@ -65,6 +65,15 @@ def studentCountEveryCollege(request):
 
     return JsonResponse(result)
 
+def radarStudenCountEveryCollege(request):
+    # Query to count students for each college
+    college_student_counts = Student.objects.values('program__college__college_name').annotate(student_count=Count('id'))
+
+    # Prepare data for the chart
+    result = {college['program__college__college_name']: college['student_count'] for college in college_student_counts}
+
+    return JsonResponse(result)
+
 
 
 class OrganizationList(ListView):
