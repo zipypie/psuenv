@@ -7,6 +7,7 @@ from studentorg.views import StudentListView, StudentCreateView, StudentUpdateVi
 from studentorg.views import CollegeListView, CollegeCreateView, CollegeUpdateView, CollegeDeleteView
 from studentorg.views import ProgramListView, ProgramCreateView, ProgramUpdateView, ProgramDeleteView
 from studentorg.views import HomePageView, ChartView, orgMemDoughnutChart
+
 from studentorg import views
 from django.db import connection
 from django.http import JsonResponse
@@ -25,7 +26,7 @@ urlpatterns = [
     path('', views.HomePageView.as_view(), name='home'),
     #charts
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
-    path('doughnut_chart/', orgMemDoughnutChart, name='doughnut-chart'),
+    path('doughnut-chart/', orgMemDoughnutChart, name='doughnut-chart'),
     
     path('organization_list/', OrganizationList.as_view(), name='organization-list'),
     path('organization_list/add/', OrganizationCreateView.as_view(), name='organization-add'),
