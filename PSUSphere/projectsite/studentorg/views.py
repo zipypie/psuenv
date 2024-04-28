@@ -15,7 +15,8 @@ from django.db import connection
 from django.http import JsonResponse
 from django.db.models.functions import ExtractMonth
 from django.db.models import Count
-from datetime import datetime
+from datetime import datetime, timedelta
+
 
 #charts 
 
@@ -54,6 +55,17 @@ def orgMemDoughnutChart(request):
     result = {name: count for name, count in rows}
 
     return JsonResponse(result)
+
+def studentCountEveryCollege(request):
+    # Query to count students for each college
+    college_student_counts = Student.objects.values('program__college__college_name').annotate(student_count=Count('id'))
+
+    # Prepare data for the chart
+    result = {college['program__college__college_name']: college['student_count'] for college in college_student_counts}
+
+    return JsonResponse(result)
+
+
 
 class OrganizationList(ListView):
     model = Organization

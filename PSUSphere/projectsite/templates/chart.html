@@ -16,7 +16,20 @@
         </div>
       </div>
     </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Doughnut Chart</div>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="doughnut-chart-college" style="width: 100%; height: 400px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>
 {% endblock %}
 
@@ -69,6 +82,51 @@ fetch("/doughnut-chart/")
         console.error("Error fetching data:", error);
     });
   }
+
+
+
+  var doughnutChart = new Chart(document.getElementById("doughnut-chart-college").getContext("2d"), {
+    type: 'doughnut',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Number of Members',
+            data: [],
+            backgroundColor: ['rgba(255, 206, 86)', 'rgba(37, 26, 117)', 'rgba(107, 2, 42)', 'rgba(255, 109, 36)', 'rgba(7, 235, 147)', 'rgba(54, 162, 235)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      pieceLabel: {
+        render: "percentage",
+        fontColor: "white",
+        fontSize: 14,
+      },
+        legend: {
+            position: "bottom",
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});
+
+fetch("/doughnut-chart-college/")
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        var labels = Object.keys(data);
+        var counts = Object.values(data);
+
+        doughnutChart.data.labels = labels;
+        doughnutChart.data.datasets[0].data = counts;
+
+        doughnutChart.update();
+    })
+    .catch((error) => {
+        console.error("Error fetching data:", error);
+    });
+
+
     loadChartData();
 </script>
 {% endblock %}
