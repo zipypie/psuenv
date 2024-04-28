@@ -40,6 +40,19 @@
         </div>
       </div>
     </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Chart with HTML Legends</div>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+            <canvas id="html-legends-chart" style="width: 100%; height: 400px;"></canvas>
+          </div>
+          <div id="myChartLegend"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -96,6 +109,74 @@
       });
   }
 
+
+  function loadHtmlLegendsChartData() {
+    fetch("/html-legends-chart/")
+      .then(response => response.json())
+      .then(data => {
+        var labels = data.labels;
+        var counts = data.counts;
+        var randomColors = generateRandomColors(labels.length);
+  
+        // Update chart data
+        myHtmlLegendsChart.data.labels = labels;
+        myHtmlLegendsChart.data.datasets[0].data = counts;
+        myHtmlLegendsChart.data.datasets[0].borderColor = randomColors;
+        myHtmlLegendsChart.data.datasets[0].pointBackgroundColor = randomColors;
+        myHtmlLegendsChart.data.datasets[0].backgroundColor = randomColors;
+        myHtmlLegendsChart.data.datasets[0].legendColor = randomColors;
+  
+        // Update legend
+        updateLegend(labels, randomColors);
+  
+        // Update chart
+        myHtmlLegendsChart.update();
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }
+  
+  function updateLegend(labels, colors) {
+    var legendContainer = document.getElementById("myChartLegend");
+    legendContainer.innerHTML = ""; // Clear existing legend
+  
+    for (var i = 0; i < labels.length; i++) {
+      var label = labels[i];
+      var color = colors[i];
+  
+      var legendItem = document.createElement("div");
+      legendItem.classList.add("legend-item");
+  
+      var colorBox = document.createElement("span");
+      colorBox.classList.add("color-box");
+      colorBox.style.backgroundColor = color;
+  
+      var labelSpan = document.createElement("span");
+      labelSpan.textContent = label;
+  
+      legendItem.appendChild(colorBox);
+      legendItem.appendChild(labelSpan);
+  
+      legendContainer.appendChild(legendItem);
+    }
+  }
+  
+  function generateRandomColors(count) {
+    var colors = [];
+    for (var i = 0; i < count; i++) {
+      // Generate random RGB values
+      var r = Math.floor(Math.random() * 256);
+      var g = Math.floor(Math.random() * 256);
+      var b = Math.floor(Math.random() * 256);
+      var color = `rgba(${r}, ${g}, ${b}, 0.7)`; // Random color with opacity 0.7
+      colors.push(color);
+    }
+    return colors;
+  }
+  
+
+  
   var doughnutChart = new Chart(document.getElementById("doughnut-chart").getContext("2d"), {
     type: 'doughnut',
     data: {
@@ -170,8 +251,14 @@
     });
   
 
+
+
+    // Chart with HTML Legends
+  loadHtmlLegendsChartData();
   loadDoughnutChartData();
   loadDoughnutChartCollegeData();
   loadRadarChartData();
+
+
 </script>
 {% endblock %}

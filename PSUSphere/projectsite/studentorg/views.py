@@ -74,6 +74,20 @@ def radarStudenCountEveryCollege(request):
 
     return JsonResponse(result)
 
+from django.http import JsonResponse
+from .models import OrgMember
+
+def orgMemberCountEveryOrganization(request):
+    # Query to count members for each organization
+    org_member_counts = OrgMember.objects.values('organization__name').annotate(member_count=Count('id')).order_by('joined_date')
+
+    # Prepare data for the chart
+    result = {
+        'labels': [org['organization__name'] for org in org_member_counts],
+        'counts': [org['member_count'] for org in org_member_counts]
+    }
+
+    return JsonResponse(result)
 
 
 class OrganizationList(ListView):
