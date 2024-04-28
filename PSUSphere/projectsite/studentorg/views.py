@@ -8,12 +8,53 @@ from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
+
+from django.shortcuts import render
+from django.views.generic.list import ListView
+from django.db import connection
+from django.http import JsonResponse
+from django.db.models.functions import ExtractMonth
+from django.db.models import Count
+from datetime import datetime
+
+#charts 
+
+
+
 @method_decorator(login_required, name='dispatch')
 class HomePageView(ListView):
     model = Organization
     context_object_name = 'home'
     template_name = "home.html"
     
+    
+class ChartView(ListView):
+    template_name = 'chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        pass
+    
+def orgMemDoughnutChart(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query to count student members for each organization
+        cursor.execute("""
+            SELECT studentorg_organization.name, COUNT(studentorg_orgmember.id) AS student_count
+            FROM studentorg_orgmember
+            INNER JOIN studentorg_organization ON studentorg_orgmember.organization_id = studentorg_organization.id
+            GROUP BY studentorg_organization.name
+        """)
+        # Fetch all rows from the cursor
+        rows = cursor.fetchall()
+        
+    # Prepare data for the chart
+    result = {name: count for name, count in rows}
+
+    return JsonResponse(result)
+
 class OrganizationList(ListView):
     model = Organization
     context_object_name ='organization'
@@ -178,3 +219,4 @@ class ProgramDeleteView(DeleteView):
     model = Program
     template_name = 'program_delete.html'
     success_url = reverse_lazy('program-list')
+
