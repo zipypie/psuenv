@@ -91,6 +91,31 @@ def programPolarchart(request):
 
     return JsonResponse(result)
 
+from django.http import JsonResponse
+from django.db import connection
+
+def htmlLegendsChart(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query to count student members for each organization and their month joined
+        cursor.execute("""
+            SELECT studentorg_organization.name, COUNT(studentorg_orgmember.id) AS student_count, STRFTIME('%m', studentorg_orgmember.date_joined) AS joined_month
+            FROM studentorg_orgmember
+            INNER JOIN studentorg_organization ON studentorg_orgmember.organization_id = studentorg_organization.id
+            GROUP BY studentorg_organization.name, joined_month
+        """)
+        # Fetch all rows from the cursor
+        rows = cursor.fetchall()
+        
+    # Prepare data for the chart
+    result = {}
+    for org_name, count, joined_month in rows:
+        if org_name not in result:
+            result[org_name] = {'student_count': {}, 'total_students': 0}
+        result[org_name]['student_count'][joined_month] = count
+        result[org_name]['total_students'] += count
+
+    return JsonResponse(result)
+
 class OrganizationList(ListView):
     model = Organization
     context_object_name ='organization'
