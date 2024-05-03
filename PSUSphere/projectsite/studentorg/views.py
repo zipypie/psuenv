@@ -119,7 +119,7 @@ def htmlLegendsChart(request):
 class OrganizationList(ListView):
     model = Organization
     context_object_name ='organization'
-    template_name = 'organization_list.html '
+    template_name = 'organization_list.html'
     paginate_by = 5
     
     def get_queryset(self, *args, **kwargs):
